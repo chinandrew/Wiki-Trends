@@ -1,0 +1,4 @@
+#Page Views
+https://dumps.wikimedia.org/other/pagecounts-raw/
+#Text, Revisions, Abstracts, Titles, etc
+https://en.wikipedia.org/wiki/Wikipedia:Database_download#English-language_Wikipedia
