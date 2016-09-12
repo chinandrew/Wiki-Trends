@@ -2,3 +2,7 @@
 https://dumps.wikimedia.org/other/pagecounts-raw/
 #Text, Revisions, Abstracts, Titles, etc
 https://en.wikipedia.org/wiki/Wikipedia:Database_download#English-language_Wikipedia
+#What links here
+https://en.wikipedia.org/w/index.php?title=Special%3AWhatLinksHere&limit=500&target=google&namespace=0
+#Edit histories
+https://tools.wmflabs.org/xtools-articleinfo/?article=Google&project=en.wikipedia.org
