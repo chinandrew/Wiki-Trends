@@ -3,7 +3,7 @@ graph = [2 -1 0 0 -1 0 ; -1 3 -1 0 -1 0 ; 0 -1 2 -1 0 0 ; 0 0 -1 3 -1 -1; -1 -1 
 b = [ 0 1 1 0 0 0]';
 a = pinv(graph)*b;
 p = invLogit(a+log(1/10));    #creates vector of probabilities
-
+L = sparse(graph)
 
 function newNode(graph, p)
     degree = 0
@@ -22,3 +22,28 @@ function newNode(graph, p)
     end 
     return graph
 end
+
+
+using LightGraphs
+
+function LapSolve(L,b,tol=1e-5)
+    rnorm = [1.]
+    n = size(L)[1]
+    x = zeros(n)
+    while rnorm[1,1] > tol * n
+        r = b - mean(b) - graph * x
+        rnorm = r'*r
+        print(rnorm)
+        alpha = rnorm / (r' * graph * r)
+        x = x + alpha .* r
+    end
+    return x
+end
+ 
+levels = 20
+g = BinaryTree(levels)
+n = nv(g)
+L = laplacian_matrix(g)
+b = (rand(n) .< 8 / n)*1. 
+@time a = lufact(L) \ (b - mean(b))
+
