@@ -3,7 +3,7 @@ graph = [2 -1 0 0 -1 0 ; -1 3 -1 0 -1 0 ; 0 -1 2 -1 0 0 ; 0 0 -1 3 -1 -1; -1 -1 
 b = [ 0 1 1 0 0 0]';
 a = pinv(graph)*b;
 p = invLogit(a+log(1/10));    #creates vector of probabilities
-
+L = sparse(graph)
 
 function newNode(graph, p)
     degree = 0
@@ -21,4 +21,67 @@ function newNode(graph, p)
         graph[size(graph)[1],size(graph)[1]]  = degree    #add node degree to diagonal
     end 
     return graph
+end
+
+
+using LightGraphs
+
+function LapSolve(L,b,tol=1e-5)
+    rnorm = [1.]
+    n = size(L)[1]
+    x = zeros(n)
+    while rnorm[1,1] > tol * n
+        r = b - mean(b) - graph * x
+        rnorm = r'*r
+        print(rnorm)
+        alpha = rnorm / (r' * graph * r)
+        x = x + alpha .* r
+    end
+    return x
+end
+ 
+levels = 20
+g = BinaryTree(levels)
+n = nv(g)
+L = laplacian_matrix(g)
+b = (rand(n) .< 8 / n)*1. 
+@time a = lufact(L) \ (b - mean(b))
+
+
+#Add new node using LightGraphs
+
+
+using LightGraphs
+
+invLogit(x) = 1./(1.+e.^-x)
+
+function addNode2(graph, p)
+    add_vertex!(graph)
+    x = nv(graph)
+    flips = rand(x-1)
+    degree = 0
+    while degree ==0
+        for i = 1:x-1
+            if p[i]>flips[i]
+                add_edge!(g,i,x)
+                degree +=1 
+            end
+        end
+    end
+    return graph
+end
+
+
+levels = 10
+g = BinaryTree(levels)
+n = nv(g)
+b = (rand(n) .< 8 / n)*1. 
+for i = 1:20
+    n = nv(g)
+    L = laplacian_matrix(g)
+    a = lufact(L) \ (b - mean(b))    
+    a_0 = log(1/1000)
+    p = invLogit(a+a_0)
+    addNode2(g,p)
+    push!(b,0)
 end
