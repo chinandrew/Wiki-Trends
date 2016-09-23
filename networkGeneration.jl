@@ -47,6 +47,7 @@ L = laplacian_matrix(g)
 b = (rand(n) .< 8 / n)*1. 
 @time a = lufact(L) \ (b - mean(b))
 
+<<<<<<< HEAD
 
 #Add new node using LightGraphs
 
@@ -85,3 +86,5 @@ for i = 1:20
     addNode2(g,p)
     push!(b,0)
 end
+=======
+>>>>>>> origin/master
