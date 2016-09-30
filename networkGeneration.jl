@@ -1,3 +1,5 @@
+using LightGraphs
+
 invLogit(x) = 1./(1.+e.^-x)    #define inverse logit
 graph = [2 -1 0 0 -1 0 ; -1 3 -1 0 -1 0 ; 0 -1 2 -1 0 0 ; 0 0 -1 3 -1 -1; -1 -1 0 -1 3 0;0 0 0 -1 0 1];    #laplacian matrix
 b = [ 0 1 1 0 0 0]';
@@ -23,36 +25,6 @@ function newNode(graph, p)
     return graph
 end
 
-
-using LightGraphs
-
-function LapSolve(L,b,tol=1e-5)
-    rnorm = [1.]
-    n = size(L)[1]
-    x = zeros(n)
-    while rnorm[1,1] > tol * n
-        r = b - mean(b) - graph * x
-        rnorm = r'*r
-        print(rnorm)
-        alpha = rnorm / (r' * graph * r)
-        x = x + alpha .* r
-    end
-    return x
-end
- 
-levels = 20
-g = BinaryTree(levels)
-n = nv(g)
-L = laplacian_matrix(g)
-b = (rand(n) .< 8 / n)*1. 
-@time a = lufact(L) \ (b - mean(b))
-
-
-#Add new node using LightGraphs
-
-
-using LightGraphs
-
 invLogit(x) = 1./(1.+e.^-x)
 
 function addNode2(graph, p)
@@ -76,15 +48,20 @@ levels = 10
 g = BinaryTree(levels)
 n = nv(g)
 b = (rand(n) .< 8 / n)*1. 
-for i = 1:20
+
+function addPrefNode(g,b,a_0 = -7)
     n = nv(g)
     L = laplacian_matrix(g)
     a = lufact(L) \ (b - mean(b))    
-    a_0 = log(1/1000)
     p = invLogit(a+a_0)
     addNode2(g,p)
     push!(b,0)
+    return p
 end
+
+function pastNeighbors(g,v)
+    N = neighbors(g,v)
+    return N[N < v]
 
 function randEdgeGen(graph, newedges)
     for i in 1:newedges
