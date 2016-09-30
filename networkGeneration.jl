@@ -63,7 +63,7 @@ function addNode2(graph, p)
     while degree ==0
         for i = 1:x-1
             if p[i]>flips[i]
-                add_edge!(g,i,x)
+                add_edge!(graph,i,x)
                 degree +=1 
             end
         end
@@ -85,5 +85,18 @@ for i = 1:20
     addNode2(g,p)
     push!(b,0)
 end
+
+function randEdgeGen(graph, newedges)
+    for i in 1:newedges
+        z = newedges
+        x = collect(1:nv(graph))
+        edge1 = rand(x)
+        deleteat!(x, edge1)
+        edge2 = rand(x)
+        add_edge!(graph,edge1,edge2)
+    end
+    return graph
+end
+
 =======
 
