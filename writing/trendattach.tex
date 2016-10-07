@@ -1,0 +1,82 @@
+\documentclass[twoside,11pt]{article}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{graphicx,bm,amssymb,breqn}
+\usepackage[sort&compress]{natbib} \setlength{\bibsep}{0.0pt}
+\usepackage{algorithm,algpseudocode}
+
+% colors
+\usepackage{color}
+\definecolor{darkred}{RGB}{100,0,0}
+\definecolor{darkgreen}{RGB}{0,100,0}
+\definecolor{darkblue}{RGB}{0,0,150}
+
+% links
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=darkred, citecolor=darkgreen, urlcolor=darkblue}
+\usepackage{url}
+
+\pagestyle{myheadings}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\pp}{\mathbb} %Spaces notation
+\newcommand{\cc}{\mathcal} %Set notation
+
+\def\beq{\begin{equation}} % \setcounter{equation}{1}}
+\def\eeq{\end{equation}}
+\def\beqn{\begin{dmath*}}
+\def\eeqn{\end{dmath*}}
+\newcommand{\teq}[1]{\smash{$#1$}}
+
+\begin{document}
+
+
+\title{Learning Attachment Preference Trends in Dynamic Networks}
+\author{
+Andrew Chin$^{1}$\\
+{\tt aschin@gmail.com}\\
+\and
+James Sharpnack$^{1}$ \\
+{\tt  jsharpna@ucdavis.edu} \\
+\and
+\begin{tabular}{c}
+  $^{1}$ Department of Statistics, UC Davis, Davis, CA 95616\\
+\end{tabular}
+}
+
+\date{}%\today}
+\maketitle
+
+\begin{abstract}
+Here is the abstract.
+
+\medskip\noindent
+{\em Keywords:} keyword 1, keyword 2.
+\end{abstract}
+
+
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Notation}
+Vectors and matrices are boldfaced $\bm a, \bm A$.
+Sets and spaces are caligraphic and uppercase $\cc S$, probability measures and some sets are bold-faced, $\pp P$.
+
+You can make equations by 
+
+\beq 
+\label{eq:eqname}
+\vv \alpha \star \vv \beta
+\eeq
+and inline equations are \teq{\sum \alpha + \beta}
+
+
+\subsection*{Acknowledgments}
+
+Grant support, people that helped.
+
+\bibliographystyle{chicago}
+\bibliography{biblio}
+
+\end{document}
