@@ -1,0 +1,126 @@
+\RequirePackage{bm}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{breqn}
+\ifx\proof\undefined 
+\RequirePackage{amsthm}
+\fi
+
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+% bold alphabet 
+
+\newcommand{\vv}{\bm}  %vector notation
+\newcommand{\mm}{\bm}  %matrix notation
+\newcommand{\ff}{\mathpzc} %function notation
+\newcommand{\pp}{\mathbb} %Spaces notation
+\newcommand{\ee}{\mathcal} %Set notation
+
+\def\bgroup{\begin{dgroup}[noalign]}
+\def\egroup{\end{dgroup}}
+%\renewcommand{\theequation}{\star}
+\def\beq{\begin{equation}} % \setcounter{equation}{1}}
+\def\eeq{\end{equation}}
+\def\beqn{\begin{dmath*}}
+\def\eeqn{\end{dmath*}}
+\def\Bitem{\begin{itemize}\setlength{\itemsep}{.2in}}
+\def\bitem{\begin{itemize}\setlength{\itemsep}{.05in}}
+\def\eitem{\end{itemize}}
+\def\Benum{\begin{enumerate}\setlength{\itemsep}{.2in}}
+\def\benum{\begin{enumerate}\setlength{\itemsep}{.05in}}
+\def\eenum{\end{enumerate}}
+\def\bmult{\begin{multline*}}
+\def\emult{\end{multline*}}
+\def\bcenter{\begin{center}}
+\def\ecenter{\end{center}}
+\def\bframe{\begin{frame}}
+\def\eframe{\end{frame}}
+
+
+% references
+\newcommand{\thmref}[1]{Theorem~\ref{thm:#1}}
+\newcommand{\prpref}[1]{Proposition~\ref{prp:#1}}
+\newcommand{\corref}[1]{Corollary~\ref{cor:#1}}
+\newcommand{\lemref}[1]{Lemma~\ref{lem:#1}}
+\newcommand{\secref}[1]{Section~\ref{sec:#1}}
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\algref}[1]{Algorithm~\ref{alg:#1}}
+
+% other symbols
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+
+\def\smallprod{\textstyle\prod}
+\def\smallsum{\textstyle\sum}
+\newcommand{\IND}[1]{\mathbbm{1}_{\{ #1 \}}}
+\newcommand{\teq}[1]{\smash{$#1$}}
+
+\newcommand*{\mini}{\mathop{\mathrm{minimize}}}
+\newcommand*{\maxi}{\mathop{\mathrm{maximize}}}
+\newcommand*{\argmin}{\mathop{\mathrm{argmin}}}
+\newcommand*{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\sgn}{\mathop{\mathrm{sign}}}
+\newcommand{\tr}{\mathop{\mathrm{tr}}}
+\newcommand{\diag}{{\rm diag}}
+\newcommand{\smallfrac}[2]{{\textstyle \frac{#1}{#2}}}  
+\newcommand*{\dr}{{\rm d}}
+
+\def\iid{{\it i.i.d.}}
+\newcommand{\iidsim}{\stackrel{{iid}}{\sim}}
+\def\bks{\backslash}
+
+%%%%% Norms
+
+\newcommand{\orlnorm}[2]{||#1||_{\Psi_{#2}}}
+\newcommand{\norm}[1]{||#1||}
+\newcommand{\bignorm}[1]{\bigg|\bigg|#1\bigg|\bigg|}
+\newcommand{\opnorm}[2]{| \! | \! | #1 | \! | \! |_{{#2}}}
+
+\newcommand{\mcomment}[1]{\marginpar{\tiny{#1}}}
+\newcommand{\fcomment}[1]{\footnote{\tiny{#1}}}
+
+
+\ifx\QED\undefined
+\def\QED{~\rule[-1pt]{5pt}{5pt}\par\medskip}
+\fi
+
+\ifx\proof\undefined
+\newenvironment{proof}{\par\noindent{\bf Proof\ }}{\hfill\BlackBox\\[2mm]}
+%\newenvironment{proof}{\emph{Proof. }}{ \hfill \QED}
+\fi
+
+\ifx\theorem\undefined
+\newtheorem{theorem}{Theorem}
+\fi
+\ifx\example\undefined
+\newtheorem{example}{Example}
+\fi
+\ifx\property\undefined
+\newtheorem{property}{Property}
+\fi
+\ifx\lemma\undefined
+\newtheorem{lemma}[theorem]{Lemma}
+\fi
+\ifx\proposition\undefined
+\newtheorem{proposition}[theorem]{Proposition}
+\fi
+\ifx\remark\undefined
+\newtheorem{remark}[theorem]{Remark}
+\fi
+\ifx\corollary\undefined
+\newtheorem{corollary}[theorem]{Corollary}
+\fi
+\ifx\definition\undefined
+\newtheorem{definition}[theorem]{Definition}
+\fi
+\ifx\conjecture\undefined
+\newtheorem{conjecture}[theorem]{Conjecture}
+\fi
+\ifx\fact\undefined
+\newtheorem{fact}[theorem]{Fact}
+\fi
+\ifx\claim\undefined
+\newtheorem{claim}[theorem]{Claim}
+\fi
+\ifx\assum\undefined
+\newtheorem{assum}[theorem]{Assumption}
+\fi

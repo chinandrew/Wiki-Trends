@@ -1,0 +1,75 @@
+\documentclass[twoside,11pt]{article}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{jsharpna_def,graphicx}
+\usepackage[sort&compress]{natbib} \setlength{\bibsep}{0.0pt}
+\usepackage{algorithm,algpseudocode}
+
+% colors
+\usepackage{color}
+\definecolor{darkred}{RGB}{100,0,0}
+\definecolor{darkgreen}{RGB}{0,100,0}
+\definecolor{darkblue}{RGB}{0,0,150}
+
+% links
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=darkred, citecolor=darkgreen, urlcolor=darkblue}
+\usepackage{url}
+
+\pagestyle{myheadings}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+
+\begin{document}
+
+
+\title{Paper skeleton}
+\author{
+James Sharpnack$^{1}$ \\
+{\tt  jsharpna@ucdavis.edu} \\
+\and
+You$^{2}$\\
+{\tt you@email.com}\\
+\and
+\begin{tabular}{c}
+  $^{1}$ Department of Statistics, UC Davis, Davis, CA 95616\\
+  $^{2}$ Department of You, UC You, Home, CA 92093\\
+\end{tabular}
+}
+
+\date{}%\today}
+\maketitle
+
+\begin{abstract}
+Here is the abstract.
+
+\medskip\noindent
+{\em Keywords:} keyword 1, keyword 2.
+\end{abstract}
+
+
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Notation}
+Scalars are lowercase letters where persistent constants being Greek letters ($\alpha$) and dummy variables are Latin ($a$).  
+Uppercase letters that are unbolded are reserved for random variables, and are Latin if univariate, $A$, and Greek if random fields, $\Xi$.
+Vectors are denoted using bold, $\vv \alpha$, while matrices are uppercase $\mm A$.
+Functions are denoted using the following caligraphic font: $\ff f$.
+Sets are caligraphic and uppercase $\ee S$, probability measures and spaces are bold-faced, $\pp P$.
+
+You can make equations by 
+\beq
+\label{eq:eqname}
+\vv \alpha \star \vv \beta
+\eeq
+and inline equations are \teq{\sum \alpha + \beta}
+\subsection*{Acknowledgments}
+
+Grant support, people that helped.
+
+\bibliographystyle{chicago}
+\bibliography{biblio}
+
+\end{document}
