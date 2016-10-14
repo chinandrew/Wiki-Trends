@@ -1,6 +1,6 @@
 \documentclass[twoside,11pt]{article}
 \usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
-\usepackage{jsharpna_def,graphicx}
+\usepackage{graphicx,bm,amssymb,breqn}
 \usepackage[sort&compress]{natbib} \setlength{\bibsep}{0.0pt}
 \usepackage{algorithm,algpseudocode}
 
@@ -20,17 +20,25 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
+\newcommand{\pp}{\mathbb} %Spaces notation
+\newcommand{\cc}{\mathcal} %Set notation
+
+\def\beq{\begin{equation}} % \setcounter{equation}{1}}
+\def\eeq{\end{equation}}
+\def\beqn{\begin{dmath*}}
+\def\eeqn{\end{dmath*}}
+\newcommand{\teq}[1]{\smash{$#1$}}
 
 \begin{document}
 
 
 \title{Paper skeleton}
 \author{
-James Sharpnack$^{1}$ \\
-{\tt  jsharpna@ucdavis.edu} \\
-\and
 You$^{2}$\\
 {\tt you@email.com}\\
+\and
+James Sharpnack$^{1}$ \\
+{\tt  jsharpna@ucdavis.edu} \\
 \and
 \begin{tabular}{c}
   $^{1}$ Department of Statistics, UC Davis, Davis, CA 95616\\
@@ -53,18 +61,18 @@ Here is the abstract.
 \label{sec:intro}
 
 \subsection{Notation}
-Scalars are lowercase letters where persistent constants being Greek letters ($\alpha$) and dummy variables are Latin ($a$).  
-Uppercase letters that are unbolded are reserved for random variables, and are Latin if univariate, $A$, and Greek if random fields, $\Xi$.
-Vectors are denoted using bold, $\vv \alpha$, while matrices are uppercase $\mm A$.
-Functions are denoted using the following caligraphic font: $\ff f$.
-Sets are caligraphic and uppercase $\ee S$, probability measures and spaces are bold-faced, $\pp P$.
+Vectors and matrices are boldfaced $\bm a, \bm A$.
+Sets and spaces are caligraphic and uppercase $\cc S$, probability measures and some sets are bold-faced, $\pp P$.
 
 You can make equations by 
-\beq
+
+\beq 
 \label{eq:eqname}
 \vv \alpha \star \vv \beta
 \eeq
 and inline equations are \teq{\sum \alpha + \beta}
+
+
 \subsection*{Acknowledgments}
 
 Grant support, people that helped.

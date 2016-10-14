@@ -28,6 +28,8 @@
 \def\beqn{\begin{dmath*}}
 \def\eeqn{\end{dmath*}}
 \newcommand{\teq}[1]{\smash{$#1$}}
+\newcommand{\logit}{{\rm logit}}
+
 
 \begin{document}
 
@@ -63,11 +65,42 @@ Here is the abstract.
 Vectors and matrices are boldfaced $\bm a, \bm A$.
 Sets and spaces are caligraphic and uppercase $\cc S$, probability measures and some sets are bold-faced, $\pp P$.
 
-You can make equations by 
+\subsection{Trend-based Model}
+
+At each time point \teq t, we observe a graph \teq{G_t}, such at time \teq t a new vertex is generated.
+It will be assumed that only one vertex is generated at a time, meaning that two vertices do not appear simultaneously.
+The precise time at which the new vertex is generated will be ignored, and the only the changes in network topology  between vertex GENERATION EVENTS is considered informative.
+This can be thought of as the jump process for the dynamic network, and henceforth we will assume that our dynamic network is in discrete time, with a new vertex added at each time increment.
+Thus, we let $v_t$ denote the vertex added at time $t$, and $\cc V_{t} = \{v_1,\ldots,v_t \}$ denotes the set of vertices up to time $t$ (let $n_t$ be the number of vertices of $G_t$).
+
+Furthermore, the only changes to the edge set at time $t$ are assumed to be the edges incident to $v_t$, and otherwise the edges persist throughout time.
+The goal of this work is to uncover active regions in the network.
+LEAD IN TO ATTACHMENT
+The event in which vertex $w \in \cc V_{t-1}$ attaches to $v_t$ is denoted $A_t(w)$, and we assume that $A_t(w)$ are independent Bernoulli trials for all $w$.
+We further assume that the model is Markovian, in that $A_t(w)$ is independent of $G_1,\ldots, G_{t-2}$ conditional on $G_{t-1}$.
+Hence, the joint distribution of $A_t(w)|G_{t-1}$ is uniquely identified with a probability vector $\bm p_t \in \pp R^{n_t - 1}$, where $\pp P(A_t(w) = 1) = p_{t,w}$.
+
+It is common to describe probabilities for Bernoulli events through a link function, $g(p)$ which is often taken to be the logistic function \teq{\logit(p) = \log\left(\frac{p}{1-p}\right)}.
+So, let us decompose
+\beq
+\logit(\bm p_t) = \bm a_t + a_0.
+\eeq
+where logit is applied elementwise, $a_0$ is a scalar, and $\sum_w \bm a_{t,w} = 0$.
+In words, we will call the vector $\bm a_t$ the {\em trend vector} at time $t$.
+Roughly, vertices, $w$, with large values of $a_{t,w}$ are thought to be `trending' in the sense that new vertices will link to or be linked to by $w$.
+The intercept term $a_0$ is thought of as a baseline probability of attachment, and in sparse networks it will be negative.
+
+
+
+
+We will assume that the dynamic network belongs to a Markov model.
+For each time point, $t$, we use $G_t$, to denote the network at that time.
+
+If we condition on the current realization 
 
 \beq 
 \label{eq:eqname}
-\vv \alpha \star \vv \beta
+\bm \alpha \star \bm \beta
 \eeq
 and inline equations are \teq{\sum \alpha + \beta}
 
