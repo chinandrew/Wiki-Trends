@@ -30,9 +30,9 @@ invLogit(x) = 1./(1.+e.^-x)
 function addNode2(graph, p)
     add_vertex!(graph)
     x = nv(graph)
-    flips = rand(x-1)
     degree = 0
     while degree ==0
+        flips = rand(x-1)
         for i = 1:x-1
             if p[i]>flips[i]
                 add_edge!(graph,i,x)
