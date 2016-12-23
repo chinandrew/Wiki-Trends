@@ -5,6 +5,8 @@ for i in (t_0+1):t
 end
 c = c/(t-t_0)*2/rho
 
+
+
 function soft(c, lambda)
 	return sign(c).*max(abs(c)-lambda/2,0)
 end

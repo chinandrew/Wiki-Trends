@@ -1,3 +1,10 @@
+const MAX_ITER = 5000
+const STOP_DIFF = 0.0001;
+
+function soft(c, lambda)
+	return sign(c).*max(abs(c)-lambda/2,0)
+end
+
 function gradient(a,a_0,u,L,rho,b)
     grad =zeros(size(x,2),1)
 	for i in 1 : size(x,1)
@@ -30,4 +37,25 @@ function newton(a_0,L,rho,b)
         iters = iters+1
     end
     return b
+end
+
+
+
+
+function ADMM()
+	a = zeros(nv(g_0))
+	b = zeros(nv(g_0))
+	iters = 0
+	diff = 1.0
+	while(diff >STOP_DIFF && iters< MAX_ITER )
+		#a update
+		for i in (t_0+1):t
+			
+		end
+		#b update
+
+		#u update
+	end
+
+
 end
