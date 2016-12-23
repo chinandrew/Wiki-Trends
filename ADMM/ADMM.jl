@@ -21,7 +21,6 @@ invLogit(x) = 1./(1.+e.^-x)
 
 
 function newton(a_0,L,rho,b)
-	a = zeros(nv(g),1)
     a_old = a
     iters = 0
     diff = 1.0
@@ -51,7 +50,7 @@ end
 
 #
 
-function ADMM(g,)
+function ADMM(A,g)
 	L = laplacian_matrix(g)
 	n= nv(g)
 	a = zeros(n)
@@ -63,7 +62,7 @@ function ADMM(g,)
 	while(diff >STOP_DIFF && iters< MAX_ITER )
 		#a update
 		a_old = a
-		for i in (t_0+1):t
+		for a_i in A
 			a = a + newton(a_0, L, rho, b)
 		end
 		#b update
@@ -74,5 +73,4 @@ function ADMM(g,)
 		u = u+ (a_hat-b)
 	end
 	return a
-
 end
