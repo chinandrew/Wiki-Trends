@@ -58,3 +58,4 @@ for i in 1:500
     connects = zeros(nv(g))
     connects[neighbos(g,nv(g))] = 1
     push!(A,connects)
+end

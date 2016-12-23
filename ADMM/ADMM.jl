@@ -20,7 +20,7 @@ end;
 invLogit(x) = 1./(1.+e.^-x)
 
 
-function newton(a_0,L,rho,b)
+function newton(a,a_0,L,rho,b)
     a_old = a
     iters = 0
     diff = 1.0
