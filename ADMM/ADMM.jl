@@ -1,9 +1,7 @@
 const MAX_ITER = 5000
 const STOP_DIFF = 0.0001;
 
-function soft(c, lambda)
-	return sign(c).*max(abs(c)-lambda/2,0)
-end
+# a update(Newton Raphson)
 
 function gradient(a,a_0,u,L,rho,b)
     grad =zeros(size(x,2),1)
@@ -22,7 +20,6 @@ end;
 invLogit(x) = 1./(1.+e.^-x)
 
 
-
 function newton(a_0,L,rho,b)
 	a = zeros(nv(g),1)
     a_old = a
@@ -39,23 +36,43 @@ function newton(a_0,L,rho,b)
     return b
 end
 
+# b update(Soft Treshold)
 
 
+function soft(a,b,u,rho, lambda)
+	c= 0
+	for i in (t_0+1):t
+		c+ u[0:t_0]' * b+rho*b'*(L*a)[0:t_0]
+	end
+	c = c/(t-t_0)*2/rho
+	return sign(c).*max(abs(c)-lambda/2,0)
+end
 
-function ADMM()
-	a = zeros(nv(g_0))
-	b = zeros(nv(g_0))
+
+#
+
+function ADMM(g,)
+	L = laplacian_matrix(g)
+	n= nv(g)
+	a = zeros(n)
+	b = zeros(n)
+	u = zeros(n)
+	alpha = 1.5  #relaxation parameter
 	iters = 0
 	diff = 1.0
 	while(diff >STOP_DIFF && iters< MAX_ITER )
 		#a update
+		a_old = a
 		for i in (t_0+1):t
-			
+			a = a + newton(a_0, L, rho, b)
 		end
 		#b update
-
+		b_old = b
+		b = soft(a,b,u,rho,lambda,lambda)
+		a_hat = alpha*a+(1-alpha)*b_old
 		#u update
+		u = u+ (a_hat-b)
 	end
-
+	return a
 
 end
