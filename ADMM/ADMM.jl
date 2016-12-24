@@ -3,16 +3,18 @@ const STOP_DIFF = 0.0001;
 
 # a update(Newton Raphson)
 
-function gradient(a,a_0,u,L,rho,b,y,t_0)
-    grad =zeros(size(x,2),1)
-	for i in 1 : size(x,1)
-		grad = grad+ (y[i]-invLogit(a+a_0))+u[0:t_0]' * L + rho*(L*a-append!(b, zeros(t-t_o,1)))
+
+function gradient(a,a_0,u,L,rho,b,y)
+    x = length(y)
+#	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
+    grad = y.-invLogit(a+a_0)+(u' * L)' + rho*(L*a-b)   #transposing gradient
 	end
 	return grad
 end;
 
 
-function hessian(a,a_0,rho,L,y)
+
+function hessian(a,a_0,rho,L)
 	hess = Diagonal(invLogit(a+a_0).*(1-invLogit(a+a_0))) + rho*L
     return -1*hess
 end;
@@ -27,7 +29,7 @@ function newton(y_i,a_0,L,rho,b)
     diff = 1.0
     while(diff >STOP_DIFF && iters< MAX_ITER )
         grad = gradient(a_old,a_0,L,rho,b,y_i,t_0)
-        hess = hessian(a_old,a_0, rho,L,y_i)
+        hess = hessian(a_old,a_0, rho,L)
         a = a_old - pinv(hess)*grad
         diff = norm(a-a_old)
         a_old = a
@@ -39,15 +41,14 @@ end
 # b update(Soft Treshold)
 
 
-function soft(a,b,u,rho, lambda)
-	c= 0
-	for i in (t_0+1):t
-		c+ u[0:t_0]' * b+rho*b'*(L*a)[0:t_0]
-	end
-	c = c/(t-t_0)*2/rho
-	return sign(c).*max(abs(c)-lambda/2,0)
+function soft(a,u,rho, lambda,t,t_0)
+    c= zeros(t_0)
+    for i in (t_0+1):(t-1)
+        c+ u[1:t_0]+rho*(L*a)[1:t_0]
+    end
+    c = c/(t-t_0)*2/rho
+    return sign(c).*max(abs(c)-lambda/2,0)
 end
-
 
 #
 
@@ -66,12 +67,16 @@ function ADMM(A,g)
 		for y_i in A
 			a = a + newton(y_i,a_0, L, rho, b)
 		end
+
 		#b update
 		b_old = b
 		b = soft(a,b,u,rho,lambda,lambda)
-		a_hat = alpha*a+(1-alpha)*b_old
+
+
 		#u update
-		u = u+ (a_hat-b)
+		u = u+ rho*(L*a-b)
+#		a_hat = alpha*a+(1-alpha)*b_old
+#		u = u+ (a_hat-b)
 	end
 	return a
 end
