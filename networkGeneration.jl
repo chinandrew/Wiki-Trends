@@ -2,7 +2,6 @@ using LightGraphs
 
 invLogit(x) = 1./(1.+e.^-x)    #define inverse logit
 
-
 function addNode2(graph, p)
     add_vertex!(graph)
     x = nv(graph)
@@ -53,9 +52,10 @@ n = nv(g)
 b = (rand(n) .< 8 / n)*1. 
 g = randEdgeGen(g,1000)
 A = Array{Int64,2}[]
-for i in 1:500
+numnewnodes = 500
+for i in 1:numnewnodes
     g = addPrefNode(g,b)
-    connects = zeros(nv(g))
+    connects = zeros(2^levels-1+numnewnodes)
     connects[neighbos(g,nv(g))] = 1
     push!(A,connects)
 end

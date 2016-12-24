@@ -52,31 +52,33 @@ end
 
 #
 
-function ADMM(A,g)
+function ADMM(A,g,t,t_0)
 	L = laplacian_matrix(g)
 	n= nv(g)
-	a = zeros(n)
-	b = zeros(n)
-	u = zeros(n)
-	alpha = 1.5  #relaxation parameter
+	a = zeros(t)
+	b = zeros(t)
+	u = zeros(t)
+#	alpha = 1.5  #relaxation parameter
 	iters = 0
 	diff = 1.0
+	a_old = a
 	while(diff >STOP_DIFF && iters< MAX_ITER )
 		#a update
-		a_old = a
 		for y_i in A
 			a = a + newton(y_i,a_0, L, rho, b)
 		end
 
 		#b update
 		b_old = b
-		b = soft(a,b,u,rho,lambda,lambda)
+		b = soft(a,b,u,rho,lambda,t,t_0)
 
 
 		#u update
 		u = u+ rho*(L*a-b)
 #		a_hat = alpha*a+(1-alpha)*b_old
 #		u = u+ (a_hat-b)
+		diff  = norm(a-a_old)
+		a_old = a
 	end
 	return a
 end
