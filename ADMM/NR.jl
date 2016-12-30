@@ -1,19 +1,19 @@
-function gradient(a,a_0,u,L,rho,b)
-    grad =zeros(size(x,2),1)
-	for i in 1 : size(x,1)
-		grad = grad+ (y[i]-invLogit(a+a_0))+u[0:t_0]' * L + rho*(L*a-append!(b, zeros(t-t_o,1)))
-	end
+
+
+function gradient(a,a_0,u,L,rho,b,y)
+#	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*L(L*a-append!(b, zeros(t-t_o,1)))
+	grad = y.-invLogit(a+a_0)+(u' * L)' .+ rho*L*(L*a-b) 
 	return grad
 end;
 
 
+
 function hessian(a,a_0,rho,L)
-	hess = Diagonal(invLogit(a+a_0).*(1-invLogit(a+a_0))) + rho*L
+    hess = Diagonal(vec((invLogit(a+a_0).*(1-invLogit(a+a_0)))))+rho*L^2
     return -1*hess
 end;
 
 invLogit(x) = 1./(1.+e.^-x)
-
 
 
 function newton(a_0,L,rho,b)

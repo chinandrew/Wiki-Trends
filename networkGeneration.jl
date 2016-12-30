@@ -55,7 +55,7 @@ A = Array{Int64,2}[]
 numnewnodes = 500
 for i in 1:numnewnodes
     g = addPrefNode(g,b)
-    connects = zeros(2^levels-1+numnewnodes)
-    connects[neighbos(g,nv(g))] = 1
+    connects = zeros(2^levels-1+numnewnodes,1)
+    connects[neighbors(g,nv(g))] = 1
     push!(A,connects)
 end

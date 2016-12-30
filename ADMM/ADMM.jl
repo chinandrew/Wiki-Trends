@@ -8,14 +8,13 @@ function gradient(a,a_0,u,L,rho,b,y)
     x = length(y)
 #	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
     grad = y.-invLogit(a+a_0)+(u' * L)' + rho*(L*a-b)   #transposing gradient
-	end
 	return grad
 end;
 
 
 
 function hessian(a,a_0,rho,L)
-	hess = Diagonal(invLogit(a+a_0).*(1-invLogit(a+a_0))) + rho*L
+	hess = Diagonal(vec((invLogit(a+a_0).*(1-invLogit(a+a_0)))))+rho*L
     return -1*hess
 end;
 
@@ -23,12 +22,12 @@ invLogit(x) = 1./(1.+e.^-x)
 
 
 function newton(y_i,a_0,L,rho,b)
-	a = zeros(length(a_i),1)
+    a = zeros(length(y_i),1)
     a_old = a
     iters = 0
     diff = 1.0
     while(diff >STOP_DIFF && iters< MAX_ITER )
-        grad = gradient(a_old,a_0,L,rho,b,y_i,t_0)
+        grad = gradient(a_old,a_0,u,L,rho,b,y_i)
         hess = hessian(a_old,a_0, rho,L)
         a = a_old - pinv(hess)*grad
         diff = norm(a-a_old)
@@ -36,7 +35,7 @@ function newton(y_i,a_0,L,rho,b)
         iters = iters+1
     end
     return a
-end
+en
 
 # b update(Soft Treshold)
 
