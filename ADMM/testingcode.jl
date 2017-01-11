@@ -67,8 +67,6 @@ end;
 
 
 
-
-
 function newton(y_i,a_0,L,rho,b)
     a = zeros(length(y_i),1)
     a_old = a
