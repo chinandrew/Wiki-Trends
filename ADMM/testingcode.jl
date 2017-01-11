@@ -46,7 +46,7 @@ const STOP_DIFF = 0.0001;
 # a update(Newton Raphson)
 
 
-function gradient(a,a_0,u,L,rho,b,y)
+function grad(a,a_0,u,L,rho,b,y)
 #	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
     grad = y-invLogit(a+a_0)+(u' * L)' + rho*L*(L*a-b)
 	return grad
@@ -58,8 +58,6 @@ function hessian(a,a_0,rho,L)
     hess = Diagonal(vec((invLogit(a+a_0).*(1-invLogit(a+a_0)))))+rho*L^2
     return -1*hess
 end;
-
-invLogit(x) = 1./(1.+e.^-x)
 
 
 
@@ -73,7 +71,7 @@ function newton(y_i,a_0,L,rho,b)
     iters = 0
     diff = 1.0
     while(diff >STOP_DIFF && iters< MAX_ITER )
-        grad = gradient(a_old,a_0,u,L,rho,b,y_i)
+        grad = grad(a_old,a_0,u,L,rho,b,y_i)
         hess = hessian(a_old,a_0, rho,L)
         a = a_old - pinv(hess)*grad
         diff = norm(a-a_old)
@@ -159,7 +157,7 @@ diff = 1
 
 
 for i in 1:10
-	grad = gradient(a_old,a_0,u,L,rho,b,A[5])
+	grad = grad(a_old,a_0,u,L,rho,b,A[5])
 	hess = hessian(a_old,a_0, rho,L)
 	a = a_old - pinv(hess)*grad
 	diff = norm(a-a_old)
