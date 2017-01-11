@@ -49,7 +49,6 @@ const STOP_DIFF = 0.0001;
 #y-1./(1.+e.^-(a+a_0))+(u' * L)' + rho*L*(L*a-b)   
 
 
-
 function gradient2(a,a_0,u,L,rho,b,y)
 #	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
     grad = y-invLogit(a+a_0)+(u' * L)' + rho*L*(L*a-b)
