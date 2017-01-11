@@ -46,7 +46,11 @@ const STOP_DIFF = 0.0001;
 # a update(Newton Raphson)
 
 
-function grad(a,a_0,u,L,rho,b,y)
+#y-1./(1.+e.^-(a+a_0))+(u' * L)' + rho*L*(L*a-b)   
+
+
+
+function gradient2(a,a_0,u,L,rho,b,y)
 #	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
     grad = y-invLogit(a+a_0)+(u' * L)' + rho*L*(L*a-b)
 	return grad
@@ -71,7 +75,7 @@ function newton(y_i,a_0,L,rho,b)
     iters = 0
     diff = 1.0
     while(diff >STOP_DIFF && iters< MAX_ITER )
-        grad = grad(a_old,a_0,u,L,rho,b,y_i)
+        grad = gradient2(a_old,a_0,u,L,rho,b,y_i)
         hess = hessian(a_old,a_0, rho,L)
         a = a_old - pinv(hess)*grad
         diff = norm(a-a_old)
@@ -110,12 +114,9 @@ function ADMM(A,g,t,t_0)
 		for y_i in A
 			a = a + newton(y_i,a_0, L, rho, b)
 		end
-
 		#b update
 		b_old = b
-		b = soft(a,b,u,rho,lambda,t,t_0)
-
-
+		b = soft(a,b,u,rho,lambda,t,t_0)		
 		#u update
 		u = u+ rho*(L*a-b)
 #		a_hat = alpha*a+(1-alpha)*b_old
@@ -132,32 +133,34 @@ end
 levels = 10
 g = BinaryTree(levels)
 n = nv(g)
-b = (rand(n) .< 8 / n)*1. 
+b = (rand(n) .< 8 / n)*1. ;
 g = randEdgeGen(g,1000)
 A = Array{Int64,2}[]
 numnewnodes = 5
 for i in 1:numnewnodes
     g = addPrefNode(g,b)
-    connects = zeros(2^levels-1+numnewnodes,1)
+    connects = zeros(2^levels-1+numnewnodes,1)  #-1 for -1 1 coding
     connects[neighbors(g,nv(g))] = 1
     push!(A,connects)
 end
 
 t = 2^levels-1+numnewnodes
 t_0 = 2^levels-1
-u = zeros(t,1)+0.2
+u = zeros(t,1)+0.2;
 rho = 1.1
 lambda = 1.1
 a_0 = -7
 L = laplacian_matrix(g);
-a = zeros(length(A[5]),1)
+a = zeros(length(A[5]),1);
 a_old = a;
 iters = 0
 diff = 1
 
+#y-1./(1.+e.^-(a+a_0))+(u' * L)' + rho*L*(L*a-b)  
+
 
 for i in 1:10
-	grad = grad(a_old,a_0,u,L,rho,b,A[5])
+	grad = gradient2(a_old,a_0,u,L,rho,b,A[5])
 	hess = hessian(a_old,a_0, rho,L)
 	a = a_old - pinv(hess)*grad
 	diff = norm(a-a_old)
