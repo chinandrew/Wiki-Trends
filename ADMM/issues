@@ -1,0 +1,6 @@
+last entry negative for newton
+
+a vector negative for
+	 
+	L = laplacian_matrix(g)
+    a = lufact(L) \ (b - mean(b)) 
