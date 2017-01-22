@@ -1,4 +1,4 @@
-
+#generate graph
 levels = 10
 g = BinaryTree(levels)
 n = nv(g)
@@ -17,6 +17,7 @@ end
 
 
 
+
 function ADMM(A,L,t,t_0,new)
 	a = zeros(t,new)
 	b = zeros(t)
@@ -27,13 +28,13 @@ function ADMM(A,L,t,t_0,new)
 	b_old = b
 	while(diff >STOP_DIFF && iters< MAX_ITER )
 		#a update
-		for i in t_0:t
+		for i in 1:new
 			a[1:length(A[i]),i] = newton(A[i],a_0,L[i],rho,b[1:length(A[i])],u[1:length(A[i]),i])
-			u[1:length(A[i]),i] = u[1:length(A[i]),i]+ rho*(L[i]*a[:,i]-b[1:length(A[i])])
+			u[1:length(A[i]),i] = u[1:length(A[i]),i]+ rho*(L[i]*a[1:length(A[i]),i]-b[1:length(A[i])])
 		end
 		c = zeros(t)
-		for i in t_0:t
-			c = c+ u[:,i]'+rho(L[i]*a[:,i])/((t-t_0)*rho/2)
+		for i in 1:numnewnodes
+		    c[1:size(L[i])[1]] = c[1:1:size(L[i])[1]]+ u[1:size(L[i])[1],i]+rho*(L[i]*a[1:size(L[i])[1],i])/((t-t_0)*rho/2)
 		end
 		b = sign(c).*max(abs(c)-lambda/2,0) #soft(c)
 		diff  = norm(b-b_old)
@@ -41,3 +42,4 @@ function ADMM(A,L,t,t_0,new)
 	end
 	return b
 end
+
