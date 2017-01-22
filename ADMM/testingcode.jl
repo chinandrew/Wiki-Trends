@@ -50,9 +50,9 @@ const STOP_DIFF = 0.0001;
 
 
 function gradient2(a,a_0,u,L,rho,b,y)
-#	grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
-    grad = y-invLogit(a+a_0)+(u' * L)' + rho*L*(L*a-b)
-	return grad
+#    grad = grad+ (y[i]-invLogit(a+a_0))+(u' * L)[0:t_0] + rho*(L*a-append!(b, zeros(t-t_o,1)))
+    grad = y-invLogit(a+a_0)+(u' * L)' - rho*L*(L*a-b)
+    return grad
 end;
 
 
@@ -97,31 +97,32 @@ end
 #
 
 function ADMM(A,g,t,t_0)
-	L = laplacian_matrix(g)
-	n= nv(g)
-	a = zeros(t)
-	b = zeros(t)
-	u = zeros(t)
-#	alpha = 1.5  #relaxation parameter
-	iters = 0
-	diff = 1.0
-	a_old = a
-	while(diff >STOP_DIFF && iters< MAX_ITER )
-		#a update
-		for y_i in A
-			a = a + newton(y_i,a_0, L, rho, b)
-		end
-		#b update
-		b_old = b
-		b = soft(a,b,u,rho,lambda,t,t_0)		
-		#u update
-		u = u+ rho*(L*a-b)
-#		a_hat = alpha*a+(1-alpha)*b_old
-#		u = u+ (a_hat-b)
-		diff  = norm(a-a_old)
-		a_old = a
-	end
-	return a
+    L = laplacian_matrix(g)
+    n= nv(g)
+    a = zeros(t)
+    b = zeros(t)
+    u = zeros(t)
+#    alpha = 1.5  #relaxation parameter
+    iters = 0
+    diff = 1.0
+    a_old = a
+    while(diff >STOP_DIFF && iters< MAX_ITER )
+        #a update
+        for y_i in A
+            a = a + newton(y_i,a_0, L, rho, b)
+        end
+        #b update
+        b_old = b
+        b = soft(a,b,u,rho,lambda,t,t_0)        
+        #u update
+        
+        u = u+ rho*(L*a-b)
+#        a_hat = alpha*a+(1-alpha)*b_old
+#        u = u+ (a_hat-b)
+        diff  = norm(a-a_old)
+        a_old = a
+    end
+    return a
 end
 
 
@@ -157,12 +158,12 @@ diff = 1
 
 
 for i in 1:10
-	grad = gradient2(a_old,a_0,u,L,rho,b,A[5])
-	hess = hessian(a_old,a_0, rho,L)
-	a = a_old - pinv(hess)*grad
-	diff = norm(a-a_old)
-	a_old = a
-	iters = iters+1
+    grad = gradient2(a_old,a_0,u,L,rho,b,A[5])
+    hess = hessian(a_old,a_0, rho,L)
+    a = a_old - pinv(hess)*grad
+    diff = norm(a-a_old)
+    a_old = a
+    iters = iters+1
 end
 
 println(a_old[1:5])
