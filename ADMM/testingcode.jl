@@ -66,7 +66,7 @@ end;
 
 
 
-function newton(y_i,a_0,L,rho,b)
+function newton(y_i,a_0,L,rho,b,u)
     a = zeros(length(y_i),1)
     a_old = a
     iters = 0
@@ -96,34 +96,33 @@ end
 
 #
 
-function ADMM(A,g,t,t_0)
-    L = laplacian_matrix(g)
-    n= nv(g)
-    a = zeros(t)
-    b = zeros(t)
-    u = zeros(t)
-#    alpha = 1.5  #relaxation parameter
-    iters = 0
-    diff = 1.0
-    a_old = a
-    while(diff >STOP_DIFF && iters< MAX_ITER )
-        #a update
-        for y_i in A
-            a = a + newton(y_i,a_0, L, rho, b)
-        end
-        #b update
-        b_old = b
-        b = soft(a,b,u,rho,lambda,t,t_0)        
-        #u update
-        
-        u = u+ rho*(L*a-b)
-#        a_hat = alpha*a+(1-alpha)*b_old
-#        u = u+ (a_hat-b)
-        diff  = norm(a-a_old)
-        a_old = a
-    end
-    return a
+
+
+function ADMM(A,L,t,t_0,new)
+	a = zeros(t,new)
+	b = zeros(t)
+	u = zeros(t,new)
+#	alpha = 1.5  #relaxation parameter
+	iters = 0
+	diff = 1.0
+	b_old = b
+	while(diff >STOP_DIFF && iters< MAX_ITER )
+		#a update
+		for i in t_0:t
+			a[1:length(A[i]),i] = newton(A[i],a_0,L[i],rho,b[1:length(A[i])],u[1:length(A[i]),i])
+			u[1:length(A[i]),i] = u[1:length(A[i]),i]+ rho*(L[i]*a[1:length(A[i]),i]-b[1:length(A[i])])
+		end
+		c = zeros(t)
+		for i in t_0:t
+			c = c+ u[:,i]'+rho(L[i]*a[:,i])/((t-t_0)*rho/2)
+		end
+		b = sign(c).*max(abs(c)-lambda/2,0) #soft(c)
+		diff  = norm(b-b_old)
+		b_old = b
+	end
+	return b
 end
+
 
 
 ######################################### testing
@@ -144,7 +143,7 @@ end
 
 t = 2^levels-1+numnewnodes
 t_0 = 2^levels-1
-u = zeros(t,1)+0.2;
+u = zeros(t,1);
 rho = 1.1
 lambda = 1.1
 a_0 = -7
