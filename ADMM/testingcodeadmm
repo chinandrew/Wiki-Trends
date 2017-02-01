@@ -33,7 +33,7 @@ u = zeros(t,new)
 iters = 0
 diff = 1.0
 b_old = b
-for i in 1:10
+for i in 1:20
 	for i in 1:new
 		a[1:length(A[i]),i] = newton(A[i],a_0,L[i],rho,b[1:length(A[i])],u[1:length(A[i]),i])
 		u[1:length(A[i]),i] = u[1:length(A[i]),i]+ rho*(L[i]*a[1:length(A[i]),i]-b[1:length(A[i])])
