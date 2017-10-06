@@ -29,7 +29,7 @@ end
 
 
 """
-given graph, b vector, and a_0, adds a new node as specifiec by the model
+given graph, b vector, and a_0, adds a new node as specified by the model
 """
 function addPrefNode(g,b,a_0 = -7)
     n = nv(g)

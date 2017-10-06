@@ -1,2 +1,24 @@
-Computation Issues:
-in addPrefNode, L\b takes significant time
+- in addPrefNode, L\b takes significant time
+- parrallel?
+- ADMM stopping ocndition
+- how to evaluate precision recall for multiple time steps. use predicted attachments each time or real?
+
+Graphs
+
+
+#BinTree_10lvl+10000e+10n_sparse_seed1
+#BinTree_10lvl+10000e+50_sparse_seed2
+#BinTree_10lvl+10000e+100_sparse_seed3
+
+#BinTree_13lvl+10000e+50n_sparse_seed4
+#BinTree_13lvl+10000e+250n_sparse_seed5
+#BinTree_13lvl+10000e+500n_sparse_seed6
+
+
+#BinTree_10lvl+10000e+10n_dense_seed1
+#BinTree_10lvl+10000e+50_dense_seed2
+#BinTree_10lvl+10000e+100_dense_seed3
+
+#BinTree_13lvl+10000e+50n_dense_seed4
+#BinTree_13lvl+10000e+250n_dense_seed5
+#BinTree_13lvl+10000e+500n_dense_seed6

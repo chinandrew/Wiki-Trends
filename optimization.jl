@@ -94,7 +94,11 @@ function ADMM_grad(A,L, rho, lambda, a_0)
     iters = 0
     diff = 1.0
     b_old = b
+    j = 0
     while(diff >STOP_DIFF && iters< MAX_ITER )
+        if j%1000 ==0
+            println(diff)
+        end
         for i in 1:new
             a[i] = gradient_descent(A[i],a_0,L[i],rho,vcat(b,zeros(i-1)),u[i],0.0001)
         end
@@ -109,8 +113,10 @@ function ADMM_grad(A,L, rho, lambda, a_0)
         end
         diff  = norm(b-b_old)
         b_old = b
-        println(diff)
+        j = j+1
     end
     return(b)
 end;
+
+
 end
