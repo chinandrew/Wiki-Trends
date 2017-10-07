@@ -5,8 +5,10 @@
 - make step size argument instead of hard coded 
 - use old a[i] to initialize gradient descent?
 - compare different edges added
-- sparse vs lufact solve?
 
+oddities
+- sparse vs lufact solve?
+- difference between parallel and single threadS
 
 
 
@@ -45,13 +47,106 @@ a_0 = data["a_0"];
 genb = data["b"];
 
 
+
+
+include("graph_generation.jl")
+using graph_generation
+using LightGraphs
+
+
+srand(1);
+
+
+levels = 10  ;   #number of levels in binary tree
+new_edges = 0
+new_nodes = 50;
+a_0 = -4;
+
+
+#g = BinaryTree(levels);  #generate tree
+g = Grid([50,50])
+n = nv(g) ; #get initial number of nodes
+
+b = (rand(n) .< 8 / n)*5. ;  #generate b vector
+
+
+gen_b = copy(b);  # save for later
+g = graph_generation.randEdgeGen(g,new_edges);  
+A = Array{Int64,1}[];
+L =  SparseMatrixCSC{Int64,Int64}[];
+
+
+for i in 1:new_nodes 
+    push!(L, laplacian_matrix(g));
+    g = graph_generation.addPrefNode(g,b, a_0);
+    #connects = zeros(2^levels-2+i)  #-1 for -1 1 coding;
+    connects = zeros(50*50+i-1)  #-1 for -1 1 coding;
+    connects[neighbors(g,nv(g))] = 1;
+    push!(A,connects);
+end
+
 rho = 1;
 lambda = 0.00005;
 
-
-
-
+@everywhere include("optimization.jl")
+@everywhere using optimization
 pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0);
+
+pred_a = L[1]\(pred_b-mean(pred_b))
+gen_a = L[1]\(gen_b-mean(gen_b))
+intercept = zeros(length(pred_a)).+mean([mean(i) for i in A])
+
+#something wrong here
+gen_p = invLogit(gen_a-a_0)
+pred_p = invLogit(pred_a-a_0)
+intercept_MSE = sum((gen_p.-intercept).^2)
+pred_MSE = sum((gen_p.-pred_p).^2)
+
+
+----------------------------
+include("graph_generation.jl")
+using graph_generation
+using LightGraphs
+
+
+srand(1);
+
+
+levels = 10  ;   #number of levels in binary tree
+new_edges = 0
+new_nodes = 100;
+a_0 = -4;
+
+
+#g = BinaryTree(levels);  #generate tree
+g = Grid([50,50])
+n = nv(g) ; #get initial number of nodes
+
+b = (rand(n) .< 8 / n)*5. ;  #generate b vector
+
+
+gen_b = copy(b);  # save for later
+g = graph_generation.randEdgeGen(g,new_edges);  
+A = Array{Int64,1}[];
+L =  SparseMatrixCSC{Int64,Int64}[];
+
+
+for i in 1:new_nodes 
+    push!(L, laplacian_matrix(g));
+    g = graph_generation.addPrefNode(g,b, a_0);
+    #connects = zeros(2^levels-2+i)  #-1 for -1 1 coding;
+    connects = zeros(50*50+i-1)  #-1 for -1 1 coding;
+    connects[neighbors(g,nv(g))] = 1;
+    push!(A,connects);
+end
+
+rho = 1;
+lambda = 0.00005;
+
+include("optimization.jl")
+using optimization
+pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0);
+
 
 
 
