@@ -2,9 +2,9 @@ module optimization
 
 const MAX_ITER = 1000
 const STOP_DIFF = 0.0001
+const ADMM_MAX_ITER = 100000
 
-
-soft(c,lambda) = sign(c).*max(abs(c)-lambda/2,0)
+soft(c,lambda) = sign.(c).*max.(abs.(c)-lambda/2,0)
 
 invLogit(x) = 1./(1.+e.^-x)   
 
@@ -94,9 +94,9 @@ function ADMM_grad(A,L, rho, lambda, a_0)
     iters = 0
     diff = 1.0
     b_old = b
-    j = 0
-    while(diff >STOP_DIFF && iters< MAX_ITER )
-        if j%1000 ==0
+    iters  = 0
+    while(diff>STOP_DIFF && iters<ADMM_MAX_ITER )
+        if iters%1000 ==0
             println(diff)
         end
         for i in 1:new
@@ -113,7 +113,46 @@ function ADMM_grad(A,L, rho, lambda, a_0)
         end
         diff  = norm(b-b_old)
         b_old = b
-        j = j+1
+        iters += 1
+    end
+    return(b)
+end;
+
+function ADMM_grad_para(A,L, rho, lambda, a_0)
+    t_0 = length(A[1])
+    t = length(A[size(A)[1]])
+    new = size(A)[1] 
+    a = SharedArray{Float64,2}(ones(t,new))
+    u = Array{Float64,1}[]
+    for i in t_0:t
+        push!(u,zeros(i)+0.0)
+    end
+    b = zeros(t_0)
+    iters = 0
+    diff = 1.0
+    b_old = b
+    iters = 0
+    while(diff >STOP_DIFF && iters< ADMM_MAX_ITER )
+        if iters%1000 ==0
+            println(diff)
+        end
+        a = @parallel hcat for i in 1:new
+            temp = zeros(t)
+            temp[1:t_0+i-1] = gradient_descent(A[i],a_0,L[i],rho,vcat(b,zeros(i-1)),u[i],0.0001)
+            temp
+        end
+        c = zeros(t)
+        for i in 1:new 
+            c[1:(t_0 +i-1)] = c[1:(t_0 +i-1)]+ (u[i]+rho*(L[i]*a[1:t_0+i-1,i]))/(rho*new)
+        end
+        b = soft(c[1:t_0],2*lambda/rho)
+        #u update
+        for i in 1:new
+            u[i] = u[i]+ rho*(L[i]*a[1:t_0+i-1,i]-vcat(b,zeros(i-1)))
+        end
+        diff  = norm(b-b_old)
+        b_old = b
+        iters += 1
     end
     return(b)
 end;

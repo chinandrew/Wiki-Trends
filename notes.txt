@@ -1,24 +1,58 @@
 - in addPrefNode, L\b takes significant time
-- parrallel?
+- parallel? all grad descents can be done independently
 - ADMM stopping ocndition
 - how to evaluate precision recall for multiple time steps. use predicted attachments each time or real?
+- make step size argument instead of hard coded 
+- use old a[i] to initialize gradient descent?
+- compare different edges added
+- sparse vs lufact solve?
+
+
+
 
 Graphs
+tree
+cycle
+preferential attachment
+grid*
+small world
+Erdos renyi
 
 
-#BinTree_10lvl+10000e+10n_sparse_seed1
-#BinTree_10lvl+10000e+50_sparse_seed2
-#BinTree_10lvl+10000e+100_sparse_seed3
+B sparsity
+sparse
+dense
 
-#BinTree_13lvl+10000e+50n_sparse_seed4
-#BinTree_13lvl+10000e+250n_sparse_seed5
-#BinTree_13lvl+10000e+500n_sparse_seed6
+B norm
+tune couple of methods
+compensate with a_0
 
 
-#BinTree_10lvl+10000e+10n_dense_seed1
-#BinTree_10lvl+10000e+50_dense_seed2
-#BinTree_10lvl+10000e+100_dense_seed3
 
-#BinTree_13lvl+10000e+50n_dense_seed4
-#BinTree_13lvl+10000e+250n_dense_seed5
-#BinTree_13lvl+10000e+500n_dense_seed6
+look at expected # of attachments
+histogram of probs
+
+
+
+include("optimization.jl")
+using optimization
+using JLD
+
+data = load("graph_jld");
+L = data["laplacians"];
+A = data["connections"];
+a_0 = data["a_0"];
+genb = data["b"];
+
+
+rho = 1;
+lambda = 0.00005;
+
+
+
+
+pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0);
+
+
+
+
