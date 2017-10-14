@@ -1,5 +1,3 @@
-- in addPrefNode, L\b takes significant time
-- parallel? all grad descents can be done independently
 - ADMM stopping ocndition
 - how to evaluate precision recall for multiple time steps. use predicted attachments each time or real?
 - make step size argument instead of hard coded 
@@ -7,9 +5,11 @@
 - compare different edges added
 
 oddities
-- sparse vs lufact solve?
+- sparse vs lufact solve? different when doing laplacians\b but not for generated ones
+ 
 - difference between parallel and single threadS
 
+- probabilities go to 0 when generating
 
 
 Graphs
@@ -35,19 +35,42 @@ look at expected # of attachments
 histogram of probs
 
 
-
-include("optimization.jl")
-using optimization
+@everywhere include("optimization.jl")
+@everywhere using optimization
 using JLD
 
-data = load("graph_jld");
+invLogit(x) = 1./(1.+e.^-x)   
+Logit(x) = log.(x./(1.-x))
+
+
+data = load("graph_jld/Grid_64x64+0e+100n_sparse_seed1.jld");
 L = data["laplacians"];
 A = data["connections"];
 a_0 = data["a_0"];
-genb = data["b"];
+gen_b = data["b"];
+
+
+rho = 1;
+lambda = 0.00005;
+
+
+pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0,0.000001);
+
+pred_a = lufact(L[1])\(pred_b-mean(pred_b));
+gen_a = lufact(L[1])\(gen_b-mean(gen_b));
+intercept = zeros(length(pred_a)).+mean([mean(i) for i in A]);
+int_a = Logit(intercept).-a_0;
+
+
+intercept_MSE = mean((gen_a.-int_a).^2)
+pred_MSE = mean((gen_a.-pred_a).^2)
 
 
 
+
+
+
+--------------
 
 include("graph_generation.jl")
 using graph_generation
@@ -92,21 +115,28 @@ lambda = 0.00005;
 @everywhere using optimization
 pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0);
 
-pred_a = L[1]\(pred_b-mean(pred_b))
-gen_a = L[1]\(gen_b-mean(gen_b))
-intercept = zeros(length(pred_a)).+mean([mean(i) for i in A])
-
-#something wrong here
-gen_p = invLogit(gen_a-a_0)
-pred_p = invLogit(pred_a-a_0)
-intercept_MSE = sum((gen_p.-intercept).^2)
-pred_MSE = sum((gen_p.-pred_p).^2)
+pred_a = lufact(L[1])\(pred_b-mean(pred_b));
+gen_a = lufact(L[1])\(gen_b-mean(gen_b));
+intercept = zeros(length(pred_a)).+mean([mean(i) for i in A]);
+int_a = Logit(intercept).-a_0;
 
 
+intercept_MSE = mean((gen_a.-int_a).^2)
+pred_MSE = mean((gen_a.-pred_a).^2)
+
+
+
+
+
+gen_p = invLogit(gen_a+a_0)
+pred_p = invLogit(pred_a+a_0)
 ----------------------------
+
+
 include("graph_generation.jl")
 using graph_generation
 using LightGraphs
+invLogit(x) = 1./(1.+e.^-x)   
 
 
 srand(1);
@@ -114,7 +144,7 @@ srand(1);
 
 levels = 10  ;   #number of levels in binary tree
 new_edges = 0
-new_nodes = 100;
+new_nodes = 50;
 a_0 = -4;
 
 
@@ -145,9 +175,15 @@ lambda = 0.00005;
 
 include("optimization.jl")
 using optimization
-pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0);
+pred_b = optimization.ADMM_grad(A,L,rho,lambda,a_0);
+
+pred_a = lufact(L[1])\(pred_b-mean(pred_b))
+gen_a = lufact(L[1])\(gen_b-mean(gen_b))
+intercept = zeros(length(pred_a)).+mean([mean(i) for i in A])
 
 
-
-
+gen_p = invLogit(gen_a+a_0)
+pred_p = invLogit(pred_a+a_0)
+intercept_MSE = mean((gen_p.-intercept).^2)
+pred_MSE = mean((gen_p.-pred_p).^2)
 

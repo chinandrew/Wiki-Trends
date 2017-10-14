@@ -36,6 +36,7 @@ function addPrefNode(g,b,a_0 = -7)
     L::SparseMatrixCSC{Int64,Int64} = laplacian_matrix(g)
     a::Array{Float64,1} = lufact(L) \ (b - mean(b))
     p::Array{Float64,1} = invLogit(a+a_0)
+    println(mean(p))
     addNode(g,p)
     push!(b,0)
     return g
@@ -53,5 +54,6 @@ function randEdgeGen(graph, newedges)
     end
     return graph
 end
+
 
 end
