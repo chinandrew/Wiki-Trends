@@ -142,7 +142,7 @@ function ADMM_grad_para(A,L, rho, lambda, a_0,step)
         temp[1:t_0+i-1] = gradient_descent(A[i],a_0,L[i],rho,vcat(b,zeros(i-1)),u[i],step)
         temp
         end
-    c = zeros(t)
+      c = zeros(t)
         for i in 1:new 
             c[1:(t_0 +i-1)] = c[1:(t_0 +i-1)]+ (u[i]+rho*(L[i]*a[1:t_0+i-1,i]))/(rho*new)
         end

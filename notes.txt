@@ -1,16 +1,42 @@
-- ADMM stopping ocndition
+- ADMM stopping condition
 - how to evaluate precision recall for multiple time steps. use predicted attachments each time or real?
 - make step size argument instead of hard coded 
 - use old a[i] to initialize gradient descent?
 - compare different edges added
 
+https://arxiv.org/pdf/1506.05474.pdf
+https://arxiv.org/find/cs/1/au:+Rodriguez_M/0/1/0/all/0/1
+
+- how to do PR if you have distirbution. eg correctly guessing uniform
+	- sort by top k p's, check precision for each
+	- just use previous laplacian
+	- 
+- how to write optimization stuf
+	- each t for gradient
+	- t< t_0 for soft threshold
+	- vector vs summation notation?
+	- elementwise operations in calculation, gradient from sum
+
+
+
+
+-check a_t to see if sum to zero, subtract mean otherwise  HAD TO DO THIS
+-dont need to fit a_0 if just ranking a's
+-set null probability to be half random connections half signal connections?
+
+
+
 oddities
-- sparse vs lufact solve? different when doing laplacians\b but not for generated ones
- 
+- same a_0 for sparse and dense
 - difference between parallel and single threadS
 
 - probabilities go to 0 when generating
 
+
+RESULTS
+
+- rho = 0.0005 not very sparse, higher precision(76.2 vs 66.5) for top half
+- rho = 0.005 , 660 nonzero elements
 
 Graphs
 tree
@@ -19,6 +45,8 @@ preferential attachment
 grid*
 small world
 Erdos renyi
+
+watts strogatz*****
 
 
 B sparsity
@@ -43,7 +71,7 @@ invLogit(x) = 1./(1.+e.^-x)
 Logit(x) = log.(x./(1.-x))
 
 
-data = load("graph_jld/Grid_64x64+0e+100n_sparse_seed1.jld");
+data = load("graph_jld/WS_10000-20-02b+0e+100n_normal*3+125_sparse_seed1.jld");
 L = data["laplacians"];
 A = data["connections"];
 a_0 = data["a_0"];
@@ -51,10 +79,10 @@ gen_b = data["b"];
 
 
 rho = 1;
-lambda = 0.00005;
+lambda = 0.005;
 
 
-pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0,0.000001);
+pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0,0.0005);
 
 pred_a = lufact(L[1])\(pred_b-mean(pred_b));
 gen_a = lufact(L[1])\(gen_b-mean(gen_b));
@@ -114,76 +142,4 @@ lambda = 0.00005;
 @everywhere include("optimization.jl")
 @everywhere using optimization
 pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0);
-
-pred_a = lufact(L[1])\(pred_b-mean(pred_b));
-gen_a = lufact(L[1])\(gen_b-mean(gen_b));
-intercept = zeros(length(pred_a)).+mean([mean(i) for i in A]);
-int_a = Logit(intercept).-a_0;
-
-
-intercept_MSE = mean((gen_a.-int_a).^2)
-pred_MSE = mean((gen_a.-pred_a).^2)
-
-
-
-
-
-gen_p = invLogit(gen_a+a_0)
-pred_p = invLogit(pred_a+a_0)
-----------------------------
-
-
-include("graph_generation.jl")
-using graph_generation
-using LightGraphs
-invLogit(x) = 1./(1.+e.^-x)   
-
-
-srand(1);
-
-
-levels = 10  ;   #number of levels in binary tree
-new_edges = 0
-new_nodes = 50;
-a_0 = -4;
-
-
-#g = BinaryTree(levels);  #generate tree
-g = Grid([50,50])
-n = nv(g) ; #get initial number of nodes
-
-b = (rand(n) .< 8 / n)*5. ;  #generate b vector
-
-
-gen_b = copy(b);  # save for later
-g = graph_generation.randEdgeGen(g,new_edges);  
-A = Array{Int64,1}[];
-L =  SparseMatrixCSC{Int64,Int64}[];
-
-
-for i in 1:new_nodes 
-    push!(L, laplacian_matrix(g));
-    g = graph_generation.addPrefNode(g,b, a_0);
-    #connects = zeros(2^levels-2+i)  #-1 for -1 1 coding;
-    connects = zeros(50*50+i-1)  #-1 for -1 1 coding;
-    connects[neighbors(g,nv(g))] = 1;
-    push!(A,connects);
-end
-
-rho = 1;
-lambda = 0.00005;
-
-include("optimization.jl")
-using optimization
-pred_b = optimization.ADMM_grad(A,L,rho,lambda,a_0);
-
-pred_a = lufact(L[1])\(pred_b-mean(pred_b))
-gen_a = lufact(L[1])\(gen_b-mean(gen_b))
-intercept = zeros(length(pred_a)).+mean([mean(i) for i in A])
-
-
-gen_p = invLogit(gen_a+a_0)
-pred_p = invLogit(pred_a+a_0)
-intercept_MSE = mean((gen_p.-intercept).^2)
-pred_MSE = mean((gen_p.-pred_p).^2)
 
