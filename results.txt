@@ -24,3 +24,5 @@ lambda = 0.0027, SSE = 57310, 102 nz, 4 g0
 lambda = 0.0025, SSE = 57132, 152 nz, 4 g0
 lambda = 0.0022, SSE = 56829, 227 nz, 7 g0
 lambda = 0.0020, SSE = 56462, 326 nz, 10 g0
+lambda = 0.0019, 
+lambda = 0.0018

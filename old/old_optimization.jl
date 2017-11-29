@@ -1,9 +1,9 @@
 module optimization
 
-const MAX_ITER = 300
+const MAX_ITER = 10000
 const STOP_DIFF = 0.002
-const ADMM_MAX_ITER = 1000
-const ADMM_STOP_DIFF = 1e-3
+const ADMM_MAX_ITER = 100000
+const ADMM_STOP_DIFF = 1e-7
 
 soft(c,lambda) = sign.(c).*max.(abs.(c)-lambda/2,0)
 
@@ -40,28 +40,28 @@ function newton(y,a_0,L,rho,b,u)
 end
 
 
-function gradient_descent(a,y,a_0,L,rho,b,u,step = 0.0001)
-    #a = zeros(length(y))
+function gradient_descent(y,a_0,L,rho,b,u,step = 0.0001)
+    a = zeros(length(y))
     a_old = a
     iters = 0
     diff = 1.0
-    while(iters< MAX_ITER )
+    while(diff> STOP_DIFF && iters< MAX_ITER )
         grad = gradient(a_old,a_0,u,L,rho,b,y)
         a = a_old - grad*step
         diff = norm(a.-a_old)
         a_old = a
         iters = iters+1
     end
-    #if(iters == MAX_ITER)
-    #    println("max iter reached")
-    #end    
+    if(iters == MAX_ITER)
+        println("max iter reached")
+    end
     return a
 end
 
 
 function gradient_descent_old(y,a_0,L,rho,b,u,step = 10)
     a = zeros(length(y))
-    a_old = a   
+    a_old = a
     iters = 0
     diff = 1.0
     grad = 1
@@ -70,6 +70,7 @@ function gradient_descent_old(y,a_0,L,rho,b,u,step = 10)
         a = a_old - grad*step
         a_old = a
         iters = iters+1
+        println(norm(grad))
     end
     if(iters == MAX_ITER)
         println("max iter reached")
@@ -96,6 +97,9 @@ function ADMM_grad(A,L, rho, lambda, a_0, step)
     b_old = b
     iters  = 0
     while(diff>STOP_DIFF && iters<ADMM_MAX_ITER )
+        if iters%10 ==0
+            println(diff)
+        end
         for i in 1:new
             a[i] = gradient_descent(A[i],a_0,L[i],rho,vcat(b,zeros(i-1)),u[i],step)
         end
@@ -109,7 +113,6 @@ function ADMM_grad(A,L, rho, lambda, a_0, step)
             u[i] = u[i]+ rho*(L[i]*a[i]-vcat(b,zeros(i-1)))
         end
         diff  = norm(b-b_old)
-    print(diff)
         b_old = b
         iters += 1
     end
@@ -130,26 +133,25 @@ function ADMM_grad_para(A,L, rho, lambda, a_0,step)
     diff = 1.0
     b_old = b
     iters = 0
-    while(iters< ADMM_MAX_ITER )
-        #if iters%10 ==0
-        #    println(diff)
-        #end
+    while(diff >ADMM_STOP_DIFF && iters< ADMM_MAX_ITER )
+        if iters%50 ==0
+            println(diff)
+        end
         a = @parallel hcat for i in 1:new
         temp = zeros(t)
-        temp[1:t_0+i-1] = gradient_descent(a[1:t_0+i-1,i],A[i],a_0,L[i],rho,vcat(b,zeros(i-1)),u[i],step)
+        temp[1:t_0+i-1] = gradient_descent(A[i],a_0,L[i],rho,vcat(b,zeros(i-1)),u[i],step)
         temp
         end
-    c = zeros(t)
+      c = zeros(t)
         for i in 1:new 
             c[1:(t_0 +i-1)] = c[1:(t_0 +i-1)]+ (u[i]+rho*(L[i]*a[1:t_0+i-1,i]))/(rho*new)
         end
-    b = soft(c[1:t_0],2*lambda/rho)
+        b = soft(c[1:t_0],2*lambda/rho)
         #u update
         for i in 1:new
             u[i] = u[i]+ rho*(L[i]*a[1:t_0+i-1,i]-vcat(b,zeros(i-1)))
         end
         diff  = norm(b-b_old)
-    println(diff)
         b_old = b
         iters += 1
     end

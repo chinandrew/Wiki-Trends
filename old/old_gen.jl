@@ -35,9 +35,7 @@ function addPrefNode(g,b,a_0 = -7)
     n = nv(g)
     L::SparseMatrixCSC{Int64,Int64} = laplacian_matrix(g)
     a::Array{Float64,1} = lufact(L) \ (b - mean(b))
-    a = a.-mean(a)
     p::Array{Float64,1} = invLogit(a+a_0)
-    println(mean(p))
     if (mean(p)) <1e-9
         throw(DomainError)
     end
