@@ -1,0 +1,26 @@
+WS(125,9)
+
+lambda = 0.0061, SSE = 123328, 125 nz, 4 g0
+lambda = 0.0060, SSE = 123150, 143 nz, 4 g0 diff rho
+lambda = 0.0059, SSE = 122955, 161 nz, 5 g0
+lambda = 0.0058, SSE = 122652, 193 nz, 10 g0
+lambda = 0.0057, SSE = 122212, 242 nz, 11 g0
+lambda = 0.0056, SSE = 121752, 293 nz, 12 g0
+lambda = 0.0055, SSE = 121225, 358 nz, 14 g0
+
+
+WS(100,9)
+lambda = 0.0045, SSE = 88312, 33 nz, 2 g0
+lambda = 0.0043, SSE = 88151, 69 nz, 4 g0
+lambda = 0.0040, SSE = 87787, 146 nz, 6 g0
+lambda = 0.0037, SSE = 87303, 240 nz, 9 g0
+lambda = 0.0035, SSE = 86824, 343 nz, 12 g0
+lambda = 0.0034, SSE = 86523, 405 nz, 13 g0
+
+
+WS(75,9)
+lambda = 0.0030, SSE = 57542, 43 nz, 2 g0
+lambda = 0.0027, SSE = 57310, 102 nz, 4 g0
+lambda = 0.0025, SSE = 57132, 152 nz, 4 g0
+lambda = 0.0022, SSE = 56829, 227 nz, 7 g0
+lambda = 0.0020, SSE = 56462, 326 nz, 10 g0
