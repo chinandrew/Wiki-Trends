@@ -1,3 +1,5 @@
+Step = 0.0005
+
 WS(125,9)
 
 lambda = 0.0061, SSE = 123328, 125 nz, 4 g0
@@ -24,5 +26,20 @@ lambda = 0.0027, SSE = 57310, 102 nz, 4 g0
 lambda = 0.0025, SSE = 57132, 152 nz, 4 g0
 lambda = 0.0022, SSE = 56829, 227 nz, 7 g0
 lambda = 0.0020, SSE = 56462, 326 nz, 10 g0
-lambda = 0.0019, 
-lambda = 0.0018
+lambda = 0.0019, SSE = 56251, 384 nz, 11 g0
+lambda = 0.0018, SSE = 56028, 433 nz, 11 g0
+
+
+WS(10,0) Dense
+lambda = 0.0005, SSE = 419786, 2832 nz, 633 g0
+lambda = 0.0010, SSE = 435361, 454 nz, 62 g0
+lambda = 0.0012, SSE = 437981, 209 nz, 26 g0
+lambda = 0.0015, SSE = 438064, 44 nz, 6 g0
+
+
+Step = 0.0002
+
+Grid +7.5
+lambda = 0.001, SSE = 3.676e6, 6965 nz, 1281 g0
+lambda = 0.002, SSE = 3.669e6, 4584 nz, 538 g0
+lambda = 0.0035,

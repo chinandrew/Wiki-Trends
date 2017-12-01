@@ -5,7 +5,9 @@ using JLD
 invLogit(x) = 1./(1.+e.^-x)   
 Logit(x) = log.(x./(1.-x))
 
-data = load("graph_jld/WS_10000-20-02b+0e+100n_normal*3+75_sparse_seed1.jld");
+#data = load("graph_jld/WS_10000-20-02b+0e+100n_normal*10_dense_seed1.jld");
+
+data = load("graph_jld/Grid_100x100+0e+100n_normal+7.5_sparse_seed1.jld");
 L = data["laplacians"];
 A = data["connections"];
 a_0 = data["a_0"];
@@ -14,8 +16,8 @@ gen_b = data["b"];
 srand(1)
 
 rho = 0.5
-lambda = 0.0022
-pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0,0.0005);
+lambda = 0.0035
+pred_b = optimization.ADMM_grad_para(A,L,rho,lambda,a_0,0.0002);
 
 
 total_pred = Array{Float64,2}(501,0);
@@ -60,9 +62,10 @@ length(find(pred_b.!=0))
 results = hcat(avg_pred,avg_gen,approx_random);
 
 
-writedlm("results/WS_10000-20-02b+0e+100n_normal*3+100_sparse_seed1_05rho_00034lambda.txt",results)
+writedlm("results/WS_10000-20-02b+0e+100n_normal*10_dense_seed1_05rho_0001lambda.txt",results)
 
     
+    Grid_100x100+0e+100n_normal+7.5_sparse_seed1.jld
 
 
     
