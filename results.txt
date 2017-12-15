@@ -40,6 +40,15 @@ lambda = 0.0015, SSE = 438064, 44 nz, 6 g0
 Step = 0.0002
 
 Grid +7.5
-lambda = 0.001, SSE = 3.676e6, 6965 nz, 1281 g0
-lambda = 0.002, SSE = 3.669e6, 4584 nz, 538 g0
-lambda = 0.0035,
+lambda = 0.0005
+lambda = 0.0010, SSE = 3.676e6, 6965 nz, 1281 g0
+lambda = 0.0020, SSE = 3.669e6, 4584 nz, 538 g0
+lambda = 0.0035, SSE = 3.667e6, 3212 nz, 238 g0
+lambda = 0.0050, SSE = 3.669e6, 2731 nz, 137 g0
+lambda = 0.0065, SSE = 3.670e6, 2405 nz, 96 g0
+lambda = 0.0090, SSE = 3.673e6, 2131 nz, 77 g0
+lambda = 0.0100, 
+
+
+Grid +6.5
+lambda = 0.0075, SSE = 2.5195e6, 2093nz, 70 g0
