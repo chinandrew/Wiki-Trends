@@ -43,3 +43,19 @@ watts strogatz*
 B sparsity
 sparse
 dense
+
+
+
+P@ssw0rd
+
+
+
+graph visualizations for b and a for graph 1, time dynamic element for graph 2
+design matrix [1  log(deg/sum(deg))] or just rank probabilities since it doesnt matter based on coefficients
+compare PR for our method and next few hundred nodes vs ranking probabilities
+
+FIGURES
+2 for intros
+8 for simulations
+2 for arxiv our method
+2 for arxiv rank probabilities

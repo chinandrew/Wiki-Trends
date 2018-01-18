@@ -22,7 +22,7 @@ for i in 1:t
 end
 sum(a.==0)
 
-train_nodes = 100;
+train_nodes = 300;
 A = Array{Int64,1}[];
 L = SparseMatrixCSC{Int64,Int64}[];
 
@@ -48,4 +48,9 @@ find(pred_b.>0)
 pred_a = lufact(L[1])\(pred_b-mean(pred_b));
 pred_a -= mean(pred_a);
 
-top_pred = sortperm(pred_a)[length(pred_a)-50:length(pred_a)];
+top_pred = sortperm(pred_a)[length(pred_a)-10:length(pred_a)];
+
+
+  [2351, 4459,  7051,  8251,  9215,  9238,  9485,  9890,  9965, 11089]
+
+  [1,1,1,1,2,3,2,1,1,2] 

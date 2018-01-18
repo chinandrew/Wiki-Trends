@@ -52,3 +52,10 @@ lambda = 0.0100,
 
 Grid +6.5
 lambda = 0.0075, SSE = 2.5195e6, 2093nz, 70 g0
+lambda = 0.0090, SSE = 2.5202e6, 2005nz, 58 g0
+
+Grid +5.5
+lambda = 0.0090, SSE = 850151, 1038 nz, 64 g0
+
+Grid Dense
+lambda = 0.001, SSE = 2,1642e9, 1752 nz, 652 g0

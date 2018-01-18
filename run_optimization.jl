@@ -7,7 +7,7 @@ Logit(x) = log.(x./(1.-x))
 
 #data = load("graph_jld/WS_10000-20-02b+0e+100n_normal*10_dense_seed1.jld");
 
-data = load("graph_jld/Grid_100x100+0e+100n_normal+6.5_sparse_seed1.jld");
+data = load("graph_jld/Grid_100x100+0e+100n_normal+5.5_sparse_seed1.jld");
 
 L = data["laplacians"];
 A = data["connections"];
@@ -84,8 +84,8 @@ writedlm("results/Grid_100x100+0e+100n_normal+6.5_sparse_seed1_05rho_009lambda.t
 
     
 
-writedlm("results/pred-b_Grid_100x100+0e+100n_normal+7.5_sparse_seed1_05rho_009lambda.txt",pred_b)
-writedlm("results/Grid_100x100+0e+100n_normal+7.5_sparse_seed1_05rho_009lambda.txt",results)
+writedlm("results/pred-b_Grid_100x100+0e+100n_normal+5.5_sparse_seed1_05rho_009lambda.txt",pred_b)
+writedlm("results/Grid_100x100+0e+100n_normal+5.5_sparse_seed1_05rho_009lambda.txt",results)
 
     Grid_100x100+0e+100n_normal+7.5_sparse_seed1.jld
 
