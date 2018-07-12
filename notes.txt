@@ -67,6 +67,6 @@ FIGURES
 
 
 ADMM 500 min
-ADMM Block 10 blocks 6 minutes
+ADMM Block 10 blocks 18 minutes
 Prox Gradient Directed 1 minutes
-Prox Graidnet Undirected 
+Prox Graidnet Undirected 10 minutes	
