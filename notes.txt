@@ -59,3 +59,14 @@ FIGURES
 8 for simulations
 2 for arxiv our method
 2 for arxiv rank probabilities
+
+
+
+
+
+
+
+ADMM 500 min
+ADMM Block 10 blocks 6 minutes
+Prox Gradient Directed 1 minutes
+Prox Graidnet Undirected 

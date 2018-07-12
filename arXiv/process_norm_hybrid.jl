@@ -1,5 +1,5 @@
-@everywhere include("optimization_block.jl")
-@everywhere using optimization_block
+@everywhere include("optimization_opt.jl")
+@everywhere using optimization_opt
 using LightGraphs
 using DataFrames
 
@@ -16,7 +16,11 @@ for i in 1:size(data,1)
     add_edge!(g,data[i,5],data[i,6]);
 end
 
-
+a = []
+for i in 1:t
+    push!(a, length(neighbors(g,i)))
+end
+sum(a.==0)
 
 train_nodes = 300;
 A = Array{Int64,1}[];
@@ -69,7 +73,7 @@ max_neighbor =reverse(max_neighbor);
 #a_0 = reverse(a_0);
 individual_X = reverse(individual_X);
 
-coefs = optimization_block.newton(X,Y);
+coefs = optimization_opt.newton(X,Y);
 a_0 = Array{Float64,1}[]
 
 for x in individual_X
@@ -78,12 +82,24 @@ end
 
 
 rho = 0.5;
-lambda = 14;
+lambda = 0.07;
 tic()
-pred_b = optimization_block.ADMM_grad_para(A,L,rho,lambda,a_0,0.00001);
+pred_b = optimization_opt.ADMM_grad_para(A,L,rho,lambda,a_0,0.1);
 toc()
 find(pred_b.>0)
 
 
-#writedlm("results/ArXivTh_300train_05rho_14lambda_normalized_hybrid_connected_block.txt",pred_b)
+#writedlm("results/ArXivTh_300train_05rho_009lambda_normalized_hybrid_connected_99.txt",pred_b)
 
+pred_a = lufact(L[1])\(pred_b-mean(pred_b));
+pred_a -= mean(pred_a);
+
+top_pred = sortperm(pred_a)[length(pred_a)-10:length(pred_a)];
+
+
+
+test = 0
+for i in 1:length(A)
+    test= test+ sum(A[i])
+    println(i)
+end
